@@ -1,40 +1,426 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proje Başlangıç</title>
+    <title>L'Éther Alchimique - Luxury Perfume Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        * {
             margin: 0;
-            background-color: #f0f2f5;
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            text-align: center;
-            background: white;
+
+        :root {
+            --color-bg: #0a0a0c;
+            --color-text: #f5f5f0;
+            --color-gold: #d4af37;
+            --color-gold-light: #f4d03f;
+        }
+
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: all;
+        }
+
+        .scroll-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            max-width: 1400px;
+            width: 100%;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            pointer-events: none;
         }
-        h1 {
-            color: #2c3e50;
+
+        .content-wrapper * {
+            pointer-events: auto;
         }
-        p {
-            color: #7f8c8d;
+
+        /* SECTION 01: Hero */
+        .hero-section .headline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .hero-section .headline .subtitle {
+            display: block;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-style: italic;
+            margin-top: 1rem;
+            color: var(--color-gold);
+        }
+
+        /* SECTION 02: Exploded View */
+        .exploded-section {
+            justify-content: space-between;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            max-width: 380px;
+            opacity: 0;
+            transform: translateX(-80px);
+        }
+
+        .info-card.right {
+            transform: translateX(80px);
+        }
+
+        .info-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .info-card p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* SECTION 03: Nebula */
+        .nebula-section .center-text {
+            text-align: center;
+            opacity: 0;
+        }
+
+        .nebula-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+
+        .nebula-section .notes {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .note-item {
+            text-align: center;
+        }
+
+        .note-item span {
+            display: block;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+        }
+
+        /* SECTION 04: Alchemist's Table */
+        .alchemist-section .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .bento-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2rem;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: border-color 0.3s ease;
+        }
+
+        .bento-item:hover {
+            border-color: var(--color-gold);
+        }
+
+        .bento-item h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--color-gold);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+        }
+
+        .bento-item.interactive {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .string-icon {
+            width: 80px;
+            height: 80px;
+            margin: 1rem auto;
+        }
+
+        .string-icon path {
+            fill: none;
+            stroke: var(--color-text);
+            stroke-width: 1.5;
+            transition: stroke 0.3s ease;
+        }
+
+        .bento-item.interactive:hover .string-icon path {
+            stroke: var(--color-gold);
+        }
+
+        /* SECTION 05: Footer */
+        .footer-section {
+            height: 80vh;
+        }
+
+        .footer-content {
+            text-align: center;
+            opacity: 0;
+        }
+
+        .footer-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            border: 1px solid var(--color-gold);
+            color: var(--color-gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--color-gold);
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            color: var(--color-bg);
+        }
+
+        .cta-button:hover::before {
+            width: 100%;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            color: var(--color-gold);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .info-card {
+                max-width: 100%;
+            }
+
+            .exploded-section {
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+            }
+
+            .info-card.right {
+                transform: translateX(-80px);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Hoş Geldiniz!</h1>
-        <p>Projeniz başarıyla başlatıldı.</p>
-        <p>Bu dosyayı düzenleyerek projenizi oluşturmaya başlayabilirsiniz.</p>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader-text">L'ÉTHER ALCHIMIQUE</div>
     </div>
+
+    <!-- WebGL Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Scroll Content -->
+    <div class="scroll-container">
+        <!-- SECTION 01: Hero -->
+        <section class="hero-section" data-section="0">
+            <div class="content-wrapper">
+                <h1 class="headline">
+                    L'Éther Alchimique
+                    <span class="subtitle">The Essence of Transformation</span>
+                </h1>
+            </div>
+        </section>
+
+        <!-- SECTION 02: Exploded Alchemy -->
+        <section class="exploded-section" data-section="1">
+            <div class="content-wrapper" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="info-card left">
+                    <h3>Top Notes</h3>
+                    <p>Bergamot from Calabria meets wild lavender from Provence. A bright opening that whispers of Mediterranean dawn.</p>
+                </div>
+                <div class="info-card right">
+                    <h3>Heart Notes</h3>
+                    <p>Bulgarian rose and jasmine sambac intertwine with amber accord, creating an olfactory symphony of rare elegance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 03: Nebula Scent -->
+        <section class="nebula-section" data-section="2">
+            <div class="content-wrapper">
+                <div class="center-text">
+                    <h2>The Scent Nebula</h2>
+                    <div class="notes">
+                        <div class="note-item">
+                            <span>Amber</span>
+                        </div>
+                        <div class="note-item">
+                            <span>Jasmine</span>
+                        </div>
+                        <div class="note-item">
+                            <span>Sandalwood</span>
+                        </div>
+                        <div class="note-item">
+                            <span>Oud</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 04: Alchemist's Table -->
+        <section class="alchemist-section" data-section="3">
+            <div class="content-wrapper">
+                <div class="bento-grid">
+                    <div class="bento-item interactive" data-string-note="220">
+                        <svg class="string-icon" viewBox="0 0 100 100">
+                            <path d="M20,50 Q50,20 80,50 T140,50" />
+                        </svg>
+                        <h4>Pluck the Essence</h4>
+                        <p>Hover to hear the scent vibrate</p>
+                    </div>
+                    <div class="bento-item">
+                        <h4>Cruelty Free</h4>
+                        <p>Never tested on animals. Pure botanical extracts only.</p>
+                    </div>
+                    <div class="bento-item">
+                        <h4>Hand Crafted</h4>
+                        <p>Each bottle is filled by master perfumers in Grasse.</p>
+                    </div>
+                    <div class="bento-item interactive" data-string-note="330">
+                        <svg class="string-icon" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="35" />
+                        </svg>
+                        <h4>The Vessel</h4>
+                        <p>Mouth-blown crystal from Bohemia</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 05: Footer / Liquid Flow -->
+        <section class="footer-section" data-section="4">
+            <div class="content-wrapper">
+                <div class="footer-content">
+                    <h2>Discover Your Signature Scent</h2>
+                    <a href="#" class="cta-button">Acquire Now</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module" src="/main.js"></script>
 </body>
 </html>
